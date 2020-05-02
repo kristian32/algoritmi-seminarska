@@ -1,4 +1,3 @@
-from pylab import *
 import matplotlib.pyplot as plt
 import time
 from L_1 import L1
@@ -24,14 +23,14 @@ def show_plot(points_x, points_y, Sx, Sy, title="", xlabel="", ylabel=""):
     fig = plt.figure()
     ax = fig.add_subplot(111)
 
-    scatter(points_x, points_y, s=100, marker='o', color='b')
-    scatter(Sx, Sy, s=100, marker='o', color='r')
+    plt.scatter(points_x, points_y, s=100, marker='o', color='b')
+    plt.scatter(Sx, Sy, s=100, marker='o', color='r')
 
     left, right = -0.5, max(ax.get_xlim())
     low, high = -0.5,  max(ax.get_ylim())
 
-    arrow(left, 0, right - left + 1, 0, length_includes_head=True, head_width=0.15)
-    arrow(0, low, 0, high - low + 1, length_includes_head=True, head_width=0.15)
+    plt.arrow(left, 0, right - left + 1, 0, length_includes_head=True, head_width=0.15)
+    plt.arrow(0, low, 0, high - low + 1, length_includes_head=True, head_width=0.15)
 
     plt.xlim(left, right + 1)
     plt.ylim(low, high + 1)
@@ -40,8 +39,8 @@ def show_plot(points_x, points_y, Sx, Sy, title="", xlabel="", ylabel=""):
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
 
-    grid()
-    show()
+    plt.grid()
+    plt.show()
 
 
 def get_x_y_values(P):
@@ -56,7 +55,7 @@ def show_measured_time_by_P_size():
     P_length = [len(p) for p, p_name in P]
     for i in range(len(measured_times[::len(P)])):
         measured_for_metric = measured_times[i::len(metrics)]
-        show_plot(measured_for_metric, P_length, [], [], metrics[i].name(), "time [ms]",
+        show_plot(measured_for_metric, P_length, [], [], metrics[i].name, "time [ms]",
                   "size of P")  # show elapsed time based on size of P
 
 
