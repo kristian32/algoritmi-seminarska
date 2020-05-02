@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import time
 from L_1 import L1
 from L_2 import L2
+from L_inf import Linf
 
 
 def calculate(P, metric):
@@ -72,7 +73,7 @@ P3 = [(4, 1), (4, 2), (4, 3), (4, 4),
       (2, 1), (2, 2), (2, 3), (2, 4)]
 
 P = [(P1, "P1"), (P2, "P2"), (P3, "P3")]  # TODO add more samples
-metrics = [L1(), L2()]  # TODO add L_inf
+metrics = [L1(), L2(), Linf()]
 
 measured_times = []
 S = []
