@@ -70,6 +70,8 @@ class Linf:
                 h = max(Pmedian, key=lambda x: x[1-dim])
                 pl, ph, pd = self.getBestDist(l, h, pa, pl, ph, pd, dim)
                 P = [p for p in P if p[dim] < medp] if smallest else [p for p in P if p[dim] > medp]
+                if len(P) < 2:
+                    break
             else:
                 # Preverimo, ce je boljsa resitev v Pnext
                 l = min(Pnext, key=lambda x: (x[1-dim], -fact * x[dim])) # Zelimo najnizjo tocko ... ce jih je vec, tisto, ki je najdlje od pa horizontalno
