@@ -1,4 +1,9 @@
 from pylab import sin, cos, math
+import time
+
+
+def name():
+    return "3-dispersion in L1"
 
 
 def L_1_metric(p1, p2):  # manhattan distance
@@ -79,10 +84,30 @@ def three_dispersion_L1(P):
     return rotate_points(S[i], -angles[i // 2])
 
 
-P = {(4, 1), (4, 2), (4, 3), (4, 4),
-     (3, 1), (3, 2), (3, 3), (3, 4),
-     (2, 1), (2, 2), (2, 3), (2, 4),
-             (1, 2)}
+def measure_time(P):
+    start = time.time()
+    print(name())
+    print("Given set of ", len(P), " points")
 
-S = three_dispersion_L1(P)
-print(S)
+    S = three_dispersion_L1(P)
+    print("The optimal result is: ", S)
+
+    end = time.time()
+    print("Time elapsed: ", end - start, "\n")
+
+
+P1 = {(4, 1), (4, 2), (4, 3), (4, 4),
+      (3, 1), (3, 2), (3, 3), (3, 4),
+      (2, 1), (2, 2), (2, 3), (2, 4),
+              (1, 2)}
+
+P2 = {(4, 1), (4, 2), (4, 3), (4, 4),
+      (3, 1), (3, 2)}
+
+P3 = {(4, 1), (4, 2), (4, 3), (4, 4),
+      (3, 1), (3, 2), (3, 3), (3, 4),
+      (2, 1), (2, 2), (2, 3), (2, 4)}
+
+measure_time(P1)
+measure_time(P2)
+measure_time(P3)
