@@ -13,51 +13,70 @@ def rotate_points(P, alpha):
     return P_new
 
 
-def isTypeU(pu, pv):
+def is_type_U(pu, pv):
     if pu[0] <= pv[0]:
         return pu[1] <= pv[1]
     return pv[1] <= pu[1]
 
 
-def diameterL1(Pi):
+def diameter_L1(Pi):
     p1, p2 = diameter_extremes(Pi)
     return L_1_metric(p1, p2)
 
 
-def diameter_extremes(Pi):  # TODO is correct?
+def diameter_extremes(Pi):  # TODO is it correct?
     return Pi[0], Pi[-1]
 
 
-def getS(P):
-    pa = P[-1]  # we assume P is sorted descending by value x
+def get_S(P, pa_index):
+    pa = P[pa_index]  # we assume P is sorted descending by value x
     opt_i = 0
     opt_i_index = 0
 
     for i in range(1, len(P)):
-        Pi = P[0:i]
-        pi = P[i]
-        v = min(L_1_metric(pa, pi), diameterL1(Pi))
+        if pa_index == -1:
+            Pi = P[0:i]
+            pi = P[i]
+        else:
+            Pi = P[-i:]
+            pi = P[-i]
+
+        v = min(L_1_metric(pa, pi), diameter_L1(Pi))
         if v > opt_i:
             opt_i = v
             opt_i_index = i
 
-    Pi = P[0:opt_i_index]
+    if pa_index == -1:
+        Pi = P[0:opt_i_index]
+    else:
+        Pi = P[-opt_i_index:]
+
     p1, p2 = diameter_extremes(Pi)
 
-    if isTypeU(p1, p2):
-        return opt_i, (pa, min(Pi, key=lambda t: t[1]), max(Pi, key=lambda t: t[1]))
+    index = 0  # typeD
+    if is_type_U(p1, p2):
+        index = 1
 
-    return opt_i, (pa, min(Pi, key=lambda t: t[0]), max(Pi, key=lambda t: t[0]))  # typeD
+    min_pi = min(Pi, key=lambda t: t[index])
+    max_pi = max(Pi, key=lambda t: t[index])
+
+    if pa_index == -1:
+        return opt_i, (pa, min_pi, max_pi)
+
+    return opt_i, (pa, max_pi, min_pi)
 
 
-def ThreeDispersionL1(P):
+def three_dispersion_L1(P):
     val, S = [], []
-    for angle in [45, 135, 225, 315]:
-        v, s = getS(rotate_points(P, angle))  # sorted by x descending?
-        val.append(v)
-        S.append(s)
+    angles = [-45, -135, -225, -315]
+    for angle in angles:
+        for pa_index in [0, -1]:  # min or max x value
+            v, s = get_S(rotate_points(P, angle), pa_index)  # sorted by x descending?
+            val.append(v)
+            S.append(s)
 
-    return S[val.index(max(val))]
+    i = val.index(max(val))
+    return rotate_points(S[i], -angles[i // 2])
 
 
 P = {(4, 1), (4, 2), (4, 3), (4, 4),
@@ -65,6 +84,5 @@ P = {(4, 1), (4, 2), (4, 3), (4, 4),
      (2, 1), (2, 2), (2, 3), (2, 4),
              (1, 2)}
 
-S = ThreeDispersionL1(P)
+S = three_dispersion_L1(P)
 print(S)
-print(rotate_points(S, 315))
