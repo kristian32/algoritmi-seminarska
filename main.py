@@ -7,7 +7,7 @@ from L_2 import L2
 
 def calculate(P, metric):
     start = time.time()
-    print(metric.name())
+    print(metric.name)
     print("Given set of ", len(P), " points")
 
     S = metric.three_dispersion(P)
@@ -82,7 +82,7 @@ for p, p_name in P:
     for metric in metrics:
         s, t = calculate(p, metric)
         sx, sy = get_x_y_values(s)
-        show_plot(px, py, sx, sy, metric.name() + " on " + p_name)  # show all points and selected ones on plot
+        show_plot(px, py, sx, sy, metric.name + " on " + p_name)  # show all points and selected ones on plot
         measured_times.append(t*1000)  # time in ms
         S.append(s)
 

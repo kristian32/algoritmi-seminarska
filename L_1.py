@@ -2,9 +2,8 @@ from pylab import sin, cos, math
 
 
 class L1:
-
-    def name(self):
-        return "3-dispersion in L1"
+    def __init__(self):
+        self.name = "3-dispersion in L1"
 
     def L_1_metric(self, p1, p2):  # manhattan distance
         return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])

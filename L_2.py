@@ -4,9 +4,8 @@ from quickmedian import quickmedian
 
 
 class L2:
-
-    def name(self):
-        return "3-dispersion in L2"
+    def __init__(self):
+        self.name = "3-dispersion in L2"
 
     def L_2_metric(self, p1, p2):  # euclidean distance
         return sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
