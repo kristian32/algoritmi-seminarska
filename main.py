@@ -1,3 +1,5 @@
+import glob
+import ast
 import matplotlib.pyplot as plt
 import time
 from L_1 import L1
@@ -26,14 +28,16 @@ def show_plot(points_x, points_y, Sx, Sy, title="", xlabel="", ylabel=""):
     plt.scatter(points_x, points_y, s=100, marker='o', color='b')
     plt.scatter(Sx, Sy, s=100, marker='o', color='r')
 
-    left, right = -0.5, max(ax.get_xlim())
-    low, high = -0.5,  max(ax.get_ylim())
+    l, r = ax.get_xlim()
+    left, right = min(l - l/5, -l/5), max(r + 1, 1)
+    l, h = ax.get_ylim()
+    low, high = min(l - l/5, -l/5), max(h + 1, 1)
 
-    plt.arrow(left, 0, right - left + 1, 0, length_includes_head=True, head_width=0.15)
-    plt.arrow(0, low, 0, high - low + 1, length_includes_head=True, head_width=0.15)
+    plt.arrow(left, 0, right - left, 0, length_includes_head=True, head_width=0.15)
+    plt.arrow(0, low, 0, high - low, length_includes_head=True, head_width=0.15)
 
-    plt.xlim(left, right + 1)
-    plt.ylim(low, high + 1)
+    plt.xlim(left, right)
+    plt.ylim(low, high)
 
     plt.title(title, y=1.08)
     plt.xlabel(xlabel)
@@ -76,6 +80,14 @@ metrics = [L1(), L2(), Linf()]
 
 measured_times = []
 S = []
+
+# for file in glob.glob("./inputs/*.txt"):
+#     f = open(file, "r")
+#     P.append((ast.literal_eval(f.readline()), file))
+
+file = "./inputs/input_10_0.txt"
+f = open(file, "r")
+P.append((ast.literal_eval(f.readline()), file))
 
 for p, p_name in P:
     px, py = get_x_y_values(p)
