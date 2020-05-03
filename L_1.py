@@ -1,5 +1,5 @@
-from pylab import sin, cos, math
-
+# from pylab import sin, cos, math
+from math import sin, cos, radians
 
 class L1:
     def __init__(self):
@@ -9,7 +9,7 @@ class L1:
         return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
 
     def rotate_points(self, P, alpha):
-        alpha_r = math.radians(alpha)
+        alpha_r = radians(alpha)
         P_new = []
         for (x, y) in P:
             P_new.append((x * cos(alpha_r) + y * sin(alpha_r), y * cos(alpha_r) - x * sin(alpha_r)))

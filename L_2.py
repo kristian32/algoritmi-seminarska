@@ -1,4 +1,4 @@
-from pylab import sqrt
+from math import sqrt
 from scipy.spatial import ConvexHull
 from quickmedian import quickmedian
 
