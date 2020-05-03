@@ -1,14 +1,17 @@
-# from pylab import sin, cos, math
+# 3-Dispersion in L_1
+
 from math import sin, cos, radians
 
 class L1:
     def __init__(self):
         self.name = "3-dispersion in L1"
 
-    def L_1_metric(self, p1, p2):  # manhattan distance
+    @staticmethod
+    def L_1_metric(p1, p2):  # manhattan distance
         return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
 
-    def rotate_points(self, P, alpha):
+    @staticmethod
+    def rotate_points(P, alpha):
         alpha_r = radians(alpha)
         P_new = []
         for (x, y) in P:
@@ -24,7 +27,7 @@ class L1:
         p1, p2 = self.diameter_extremes(Pi)
         return self.L_1_metric(p1, p2)
 
-    def diameter_extremes(self, Pi):  # TODO is it correct?
+    def diameter_extremes(self, Pi):
         return Pi[0], Pi[-1]
 
     def get_S(self, P, pa_index):
@@ -46,32 +49,39 @@ class L1:
                 opt_i_index = i
 
         if pa_index == -1:
-            Pi = P[0:opt_i_index]
+            p1, p2 = self.diameter_extremes(P[0:opt_i_index])
         else:
-            Pi = P[-opt_i_index:]
-
-        p1, p2 = self.diameter_extremes(Pi)
+            p1, p2 = self.diameter_extremes(P[-opt_i_index:])
 
         index = 0  # typeD
         if self.is_type_U(p1, p2):
             index = 1
 
-        min_pi = min(Pi, key=lambda t: t[index])
-        max_pi = max(Pi, key=lambda t: t[index])
+        if p1[index] > p2[index]:
+            min_pi = p2
+            max_pi = p1
+        else:
+            min_pi = p1
+            max_pi = p2
 
         if pa_index == -1:
             return opt_i, (pa, min_pi, max_pi)
 
         return opt_i, (pa, max_pi, min_pi)
 
+    def getMaxMinDist(self, S):
+        return min(self.L_1_metric(S[0], S[1]), self.L_1_metric(S[0], S[2]), self.L_1_metric(S[1], S[2]))
+
     def three_dispersion(self, P):
         val, S = [], []
         angles = [-45, -135, -225, -315]
         for angle in angles:
             for pa_index in [0, -1]:  # min or max x value
-                v, s = self.get_S(self.rotate_points(P, angle), pa_index)  # sorted by x descending?
+                P_rot = self.rotate_points(P, angle)  # we rotate P
+                # P_rot_sorted = sorted(P_rot, key=lambda tup: self.L_1_metric(tup, P_rot[pa_index]), reverse=False)  # we assume them as sorted
+                P_rot_sorted = sorted(P_rot, key=lambda tup: (tup[0], tup[1]), reverse=True)  # we assume them as sorted
+                v, s = self.get_S(P_rot_sorted, pa_index)  # sorted by x descending?
                 val.append(v)
-                S.append(s)
+                S.append(self.rotate_points(s, -angle))
 
-        i = val.index(max(val))
-        return self.rotate_points(S[i], -angles[i // 2])
+        return max(S, key=lambda Si: self.getMaxMinDist(Si))
