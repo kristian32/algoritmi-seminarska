@@ -30,7 +30,6 @@ class L2:
             P.sort(key=lambda p: self.L2metric(pa, p))
             I = [0, n-1]
             while I[1]-I[0] > -1:
-                # TODO - premisli, ce je razlika = 1, torej imamo 2 elementa se
                 # Izracunamo mediano zaporednih indeksov I ... mediana je tukaj enaka mean
                 i = ceil((I[0]+I[1]) / 2)
                 dpi = self.L2metric(pa, P[i]) # d(pa, pi)
@@ -62,8 +61,6 @@ class L2:
                     # Torej vemo, da resitev ni v levi polovici P[:i], temvec
                     # je v desni, ce je se nismo nasli ... pomaknemo se v desno polovico
                     I[0] = i+1
-                    Uright = [] # Zgolj, da javi napako, ce algoritem ne bi deloval pravilno
-                    Lright = []
                 else:
                     # d(pa, P[i]) >= d(pb, pc) ... nadaljujemo iskanje v levi polovici
                     # Za nadaljne izracune bomo potrebovali trenutno konveksno ovojnico,
