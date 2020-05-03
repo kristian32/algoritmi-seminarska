@@ -1,6 +1,6 @@
 # All Convex Hull functions needed for L2
 
-__all__ = ["grahamHull", "union", "diameter"]
+__all__ = ['grahamHull', 'union', 'diameter']
 
 def orientation(p, q, r):
     '''Vrne pozitivno vrednost, ce je <p,q,r> usmerjen v smeri urinega kazalca,
@@ -54,6 +54,9 @@ def merge(S1, S2):
         else:
             S[k] = S2[j]
             j += 1
+    # Popravimo se najprej vhodni ovojnici, torej odstranimo, kar smo dodali, tj. tocko (inf,0)
+    S1.pop()
+    S2.pop()
     return S
 
 def union(U1, L1, U2, L2):

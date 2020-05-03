@@ -1,52 +1,71 @@
-from math import sqrt
-from scipy.spatial import ConvexHull
-from quickmedian import quickmedian
+# 3-Dispersion in L_2
 
+from convexhull import grahamHull, union, diameter
+from math import sqrt, ceil
 
 class L2:
     def __init__(self):
         self.name = "3-dispersion in L2"
+    
+    def L2metric(self, x, y):
+        return sqrt((x[0]-y[0])**2 + (x[1]-y[1])**2)
+    
+    def getMaxMinDist(self, S):
+        return min(self.L2metric(S[0],S[1]), self.L2metric(S[0],S[2]), self.L2metric(S[1],S[2]))
 
-    def L_2_metric(self, p1, p2):  # euclidean distance
-        return sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
-
-    def diameter_L2(self, Pi):
-        p1, p2 = self.diameter_extremes(Pi)
-        return self.L_2_metric(p1, p2)
-
-    def diameter_extremes(self, Pi):  # TODO is it correct?
-        return Pi[0], Pi[-1]
-
-    def sort_by_Pa(self, P, pa):
-        P.sort(key=lambda p: self.L_2_metric(p, pa))
-        return P
-
+    
     def three_dispersion(self, P):
-        i_opt = 0
-        i_opt_index = 0
-        pa_opt_index = 0
+        assert len(P) >= 3
 
-        for pa_index in range(len(P)):
-            pa = P[pa_index]
-            P_pa = self.sort_by_Pa(P, pa)
+        opt_S = (P[0], P[1], P[2])
+        opt_d = self.getMaxMinDist(opt_S)
 
-            # I = [i for i in range(1, len(P_pa))]
-            # for i in I:  # TODO use quickmedian
-            for i in range(1, len(P_pa)):
-                # median_i = quickmedian(I, i)
-                Pi = P_pa[0:i]
-                pi = P_pa[i]
+        Porg = [p for p in P] # Naredimo kopijo P, ki ga bomo nato cel cas sortirali
+        n = len(P) # oznacimo stevilo tock z n
 
-                # hull = ConvexHull(Pi)
+        # Za vsak pa v P izracunamo maxmin S
+        for pa in Porg:
+            opt_pair = None
+            opt_dist = -1
+            P.sort(key=lambda p: self.L2metric(pa, p))
+            I = [1, n]
+            while I[1]-I[0] > 1:
+                # Izracunamo mediano zaporednih indeksov I ... mediana je tukaj enaka mean
+                i = ceil((I[0]+I[1]) / 2)
+                dpi = self.L2metric(pa, P[i]) # d(pa, pi)
 
-                v = min(self.L_2_metric(pa, pi), self.diameter_L2(Pi))
-                if v > i_opt:
-                    i_opt = v
-                    i_opt_index = i
-                    pa_opt_index = pa_index
+                # Izracunajmo sedaj konveksno ovojnico Pi = P[i:]
+                U, L = grahamHull(P[(i-1):I[1]])
+                if I[1] < n:
+                    # Zdruzimo C in Cright, da dobimo CH(Pi)
+                    U, L = union(U, L, Uright, Lright)
+                
+                pair, d = diameter(U, L)
 
-        pa = P[pa_opt_index]
-        Pi = P[0:i_opt_index]
-        pb, pc = self.diameter_extremes(Pi)
+                # Preverimo najprej, ce smo nasli novo najboljso vrednost
+                di = min(dpi, d)
+                if di > opt_dist:
+                    opt_pair = pair
+                    opt_dist = di
 
-        return pa, pb, pc
+                if dpi < d:
+                    # Razdalja do P[i] je strogo manjsa od razdalje d(pb,pc)
+                    # Torej vemo, da resitev ni v levi polovici P[:i], temvec
+                    # je v desni, ce je se nismo nasli ... pomaknemo se v desno polovico
+                    I[0] = i
+                    Uright = None
+                    Lright = None
+                else:
+                    # d(pa, P[i]) >= d(pb, pc) ... nadaljujemo iskanje v levi polovici
+                    # Za nadaljne izracune bomo potrebovali trenutno konveksno ovojnico,
+                    # ki jo bomo združili z ovojnico iz dobljenih podintervalov v linearnem casu
+                    Uright = U
+                    Lright = L
+                    I[1] = i-1
+            # Nasli smo optimalen par opt_pair za pa
+            # Primerjajmo (pa, opt_pair) sedaj z opt_S
+            dpa = self.getMaxMinDist((pa, opt_pair[0], opt_pair[1]))
+            if dpa > opt_d:
+                opt_S = (pa, opt_pair[0], opt_pair[1])
+                opt_d = dpa
+        return opt_S
