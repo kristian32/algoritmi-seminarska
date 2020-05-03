@@ -1,14 +1,15 @@
-# from pylab import sin, cos, math
 from math import sin, cos, radians
 
 class L1:
     def __init__(self):
         self.name = "3-dispersion in L1"
 
-    def L_1_metric(self, p1, p2):  # manhattan distance
+    @staticmethod
+    def L_1_metric(p1, p2):  # manhattan distance
         return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
 
-    def rotate_points(self, P, alpha):
+    @staticmethod
+    def rotate_points(P, alpha):
         alpha_r = radians(alpha)
         P_new = []
         for (x, y) in P:
@@ -69,7 +70,10 @@ class L1:
         angles = [-45, -135, -225, -315]
         for angle in angles:
             for pa_index in [0, -1]:  # min or max x value
-                v, s = self.get_S(self.rotate_points(P, angle), pa_index)  # sorted by x descending?
+                P_rot = self.rotate_points(P, angle)  # we rotate P
+                # P_rot_sorted = sorted(P_rot, key=lambda tup: self.L_1_metric(tup, P_rot[pa_index]), reverse=False)  # we assume them as sorted
+                P_rot_sorted = sorted(P_rot, key=lambda tup: (tup[0],tup[1]), reverse=True)  # we assume them as sorted
+                v, s = self.get_S(P_rot_sorted, pa_index)  # sorted by x descending?
                 val.append(v)
                 S.append(s)
 
