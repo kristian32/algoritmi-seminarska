@@ -78,13 +78,3 @@ class L2:
                 opt_S = (pa, opt_pair[0], opt_pair[1])
                 opt_d = dpa
         return opt_S
-
-L2 = L2()
-
-P = [(0,0), (1,1), (3,2), (4,2)]
-print(L2.three_dispersion(P))
-print(L2.getMaxMinDist(((0, 0), (1, 1), (3, 2))))
-print(L2.getMaxMinDist(((0, 0), (1, 1), (4, 2))))
-
-P = [(0,0), (6,0), (3,0), (2,0), (1,0)]
-print(L2.three_dispersion(P))
