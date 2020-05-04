@@ -79,7 +79,7 @@ def union(U1, L1, U2, L2):
                 return temp, temp
     U = merge(U1,U2)
     L = merge(L1,L2)
-    return sweepHull(U), sweepHull(L)
+    return sweepHull(U), sweepHull(L, False)
 
 def rotatingCalipers(U, L):
     '''Uporabi algoritem "rotatingCalipers" za izracun parov ekstremnih tock

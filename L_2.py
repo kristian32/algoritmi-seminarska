@@ -8,14 +8,14 @@ class L2:
         self.name = "3-dispersion in L2"
     
     def L2metric(self, x, y):
-        return sqrt((x[0]-y[0])**2 + (x[1]-y[1])**2)
+        return (x[0]-y[0])**2 + (x[1]-y[1])**2
     
     def getMaxMinDist(self, S):
         return min(self.L2metric(S[0],S[1]), self.L2metric(S[0],S[2]), self.L2metric(S[1],S[2]))
 
     
     def three_dispersion(self, P):
-        assert len(P) >= 3
+        assert len(P) >= 3 # Iscemo 3 tocke, ce jih toliko sploh ni, naloga nima smisla
 
         opt_S = (P[0], P[1], P[2])
         opt_d = self.getMaxMinDist(opt_S)
@@ -38,6 +38,7 @@ class L2:
                 U, L = grahamHull(P[i:(I[1]+1)])
                 if I[1] < n-1:
                     # Zdruzimo C in Cright, da dobimo CH(Pi)
+                    # Cright = (Uright, Lright) bo vedno obstajal, ko pridemo do te situacije
                     U, L = union(U, L, Uright, Lright)
                 
                 if i == n-1:
@@ -48,13 +49,13 @@ class L2:
                         opt_d = d
                     break
                 
-                pair, d = diameter(U, L)
+                (pb,pc), d = diameter(U, L)
 
                 # Preverimo najprej, ce smo nasli novo najboljso vrednost
-                di = min(dpi, d)
-                if di > opt_dist:
-                    opt_pair = pair
-                    opt_dist = di
+                dreali = self.getMaxMinDist((pa,pb,pc)) # Tocna maxmin razdalja te trojke
+                if dreali > opt_dist:
+                    opt_pair = (pb,pc)
+                    opt_dist = dreali
 
                 if dpi < d:
                     # Razdalja do P[i] je strogo manjsa od razdalje d(pb,pc)

@@ -81,13 +81,13 @@ metrics = [L1(), L2(), Linf()]
 measured_times = []
 S = []
 
-# for file in glob.glob("./inputs/*.txt"):
-#     f = open(file, "r")
-#     P.append((ast.literal_eval(f.readline()), file))
+# for filename in glob.glob("./inputs/*.txt"):
+#     f = open(filename, "r")
+#     P.append((ast.literal_eval(f.readline()), filename))
 
-file = "./inputs/input_10_0.txt"
-f = open(file, "r")
-P.append((ast.literal_eval(f.readline()), file))
+# filename = "./inputs/input_10_0.txt"
+# f = open(filename, "r")
+# P.append((ast.literal_eval(f.readline()), filename))
 
 for p, p_name in P:
     px, py = get_x_y_values(p)
