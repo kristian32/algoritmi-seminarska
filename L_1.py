@@ -13,9 +13,12 @@ class L1:
     @staticmethod
     def rotate_points(P, alpha):
         alpha_r = radians(alpha)
-        P_new = []
-        for (x, y) in P:
-            P_new.append((x * cos(alpha_r) + y * sin(alpha_r), y * cos(alpha_r) - x * sin(alpha_r)))
+        P_new = [None] * len(P)
+        c = cos(alpha_r)
+        s = sin(alpha_r)
+        for i in range(len(P)):
+            x,y = P[i]
+            P_new[i] = (x*c-y*s, y*c+x*s)
         return P_new
 
     def is_type_U(self, pu, pv):
@@ -77,10 +80,9 @@ class L1:
         angles = [-45, -135, -225, -315]
         for angle in angles:
             for pa_index in [0, -1]:  # min or max x value
-                P_rot = self.rotate_points(P, angle)  # we rotate P
-                # P_rot_sorted = sorted(P_rot, key=lambda tup: self.L_1_metric(tup, P_rot[pa_index]), reverse=False)  # we assume them as sorted
-                P_rot_sorted = sorted(P_rot, key=lambda tup: (tup[0], tup[1]), reverse=True)  # we assume them as sorted
-                v, s = self.get_S(P_rot_sorted, pa_index)  # sorted by x descending?
+                P_rot = self.rotate_points(P, angle)
+                P_rot.sort(reverse=True)
+                v, s = self.get_S(P_rot, pa_index)  # sorted by x descending?
                 val.append(v)
                 S.append(self.rotate_points(s, -angle))
 

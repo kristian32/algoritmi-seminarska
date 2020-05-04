@@ -7,7 +7,8 @@ class L2:
     def __init__(self):
         self.name = "3-dispersion in L2"
     
-    def L2metric(self, x, y):
+    @staticmethod
+    def L2metric(x, y):
         return (x[0]-y[0])**2 + (x[1]-y[1])**2
     
     def getMaxMinDist(self, S):
