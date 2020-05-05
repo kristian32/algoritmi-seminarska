@@ -6,6 +6,7 @@ from math import sqrt, ceil
 class L2:
     def __init__(self):
         self.name = "3-dispersion in L2"
+        self.metric = "$L_2$"
     
     @staticmethod
     def L2metric(x, y):

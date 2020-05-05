@@ -5,6 +5,7 @@ from math import sin, cos, radians
 class L1:
     def __init__(self):
         self.name = "3-dispersion in L1"
+        self.metric = "$L_1$"
 
     @staticmethod
     def L_1_metric(p1, p2):  # manhattan distance

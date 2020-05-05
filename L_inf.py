@@ -5,6 +5,7 @@ from quickmedian import quickmedian
 class Linf:
     def __init__(self):
         self.name = "3-dispersion in Linf"
+        self.metric = "$L_{\\infty}$"
 
     def getBestDist(self, l, h, pa, pl, ph, pd, dim=0):
         dist_lh = min(min(abs(pa[dim]-l[dim]), abs(pa[dim]-h[dim])), h[1-dim]-l[1-dim])
