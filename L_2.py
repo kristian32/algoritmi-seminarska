@@ -1,7 +1,7 @@
 # 3-Dispersion in L_2
 
-from convexhull import grahamHull, union, diameter
-from math import sqrt, ceil
+from convexhull import sweepHull, union, diameter
+from math import ceil
 
 class L2:
     def __init__(self):
@@ -38,7 +38,7 @@ class L2:
                 dpi = self.L2metric(pa, P[i]) # d(pa, pi)
 
                 # Izracunajmo sedaj konveksno ovojnico Pi = P[i:]
-                U, L = grahamHull(P[i:(I[1]+1)])
+                U, L = sweepHull(P[i:(I[1]+1)])
                 if I[1] < n-1:
                     # Zdruzimo C in Cright, da dobimo CH(Pi)
                     # Cright = (Uright, Lright) bo vedno obstajal, ko pridemo do te situacije
@@ -49,7 +49,7 @@ class L2:
                     pb, pc = P[-2:]
                     break
                 
-                (pb,pc), d = diameter(U, L)
+                d, (pb,pc) = diameter(U, L)
 
                 if dpi < d:
                     # Razdalja do P[i] je strogo manjsa od razdalje d(pb,pc)
