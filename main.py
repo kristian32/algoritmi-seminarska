@@ -2,7 +2,9 @@ import glob
 import ast
 import matplotlib.pyplot as plt
 import time
+from numpy.ma import sqrt
 from L_1 import L1
+from L_1v2 import L1v2
 from L_2 import L2
 from L_inf import Linf
 
@@ -29,9 +31,9 @@ def show_plot(points_x, points_y, Sx, Sy, title="", xlabel="", ylabel=""):
     plt.scatter(Sx, Sy, s=100, marker='o', color='r')
 
     l, r = ax.get_xlim()
-    left, right = min(l - l/5, -l/5), max(r + 1, 1)
+    left, right = min(l, -l/5), max(r + 1, 1)
     l, h = ax.get_ylim()
-    low, high = min(l - l/5, -l/5), max(h + 1, 1)
+    low, high = min(l, -l/5), max(h + 1, 1)
 
     plt.arrow(left, 0, right - left, 0, length_includes_head=True, head_width=0.15)
     plt.arrow(0, low, 0, high - low, length_includes_head=True, head_width=0.15)
