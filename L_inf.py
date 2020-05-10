@@ -32,7 +32,7 @@ class Linf:
                 dist = dp
                 pm = p
         return (minp, pm, maxp)
-
+    
     def case23(self, P, dim=0, smallest=True):
         '''Case 2: imamo bodisi 2x H 1x V (dim=0), ali ravno obratno (dim=1).
         pa je bodisi najmanjsa vrednost (smallest), ali najvecja (!smallest).'''
@@ -61,16 +61,12 @@ class Linf:
             Pi = [pi] + [p for p in P if key_dim(p) > pi_key] # Pi ... tocke, ki so od pa oddaljene vsaj toliko kot pi | ce obstaja vec tock enakih pi, jih pobrisemo
 
             # Posodobimo / pobrisemo pl/ph, ce nista znotraj Pi
-            if pi_key > key_dim(pl):
-                pl = pi if lright is None else lright
-            if pi_key > key_dim(ph):
-                ph = pi if hright is None else hright
-            
-            # Poiscemo ekstremni tocki v (1-dim) dimenziji
-            l = min(Pi, key=key_min)
-            h = max(Pi, key=key_max)
-            pl = l if key_min(l) < key_min(pl) else pl
-            ph = h if key_max(h) > key_max(ph) else ph
+            if not wentRight or pi_key > key_dim(pl):
+                l = min(Pi, key=key_min)
+                pl = l if lright is None or key_min(l) < key_min(lright) else lright
+            if not wentRight or pi_key > key_dim(ph):
+                h = max(Pi, key=key_max)
+                ph = h if hright is None or key_max(h) > key_max(hright) else hright
 
             # Sedaj se moramo odlociti, kako nadaljevati
             diam = ph[1-dim]-pl[1-dim] # diam(Pi)
