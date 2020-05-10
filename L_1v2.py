@@ -50,10 +50,11 @@ class L1v2:
         pl = pa
         ph = pa
 
+        wentRight = False
+
+        pcD = max(P, key=lambda x: x[0]) # vedno najbolj desna tocka
         hright = None
         lright = None
-
-        wentRight = False
 
         while len(P) > 1:
             pi = quickmedian(P, key_dim)
@@ -63,11 +64,14 @@ class L1v2:
             dpi = L1v2.L_1_metric(pa, pi)  # d(pa,pi)
 
             # type U
-            pbU = min(P, key=lambda x: x[1])
-            pcU = max(P, key=lambda x: x[1])
+            pbU = min(Pi, key=lambda x: x[1])
+            if lright is not None and lright[1] < pbU[1]:
+                pbU = lright
+            pcU = max(Pi, key=lambda x: x[1])
+            if hright is not None and hright[1] > pcU[1]:
+                pcU = hright
             # type D
-            pbD = min(P, key=lambda x: x[0])
-            pcD = max(P, key=lambda x: x[0])
+            pbD = pi
 
             U = L1v2.L_1_metric(pbU, pcU)
             D = L1v2.L_1_metric(pbD, pcD)
@@ -92,7 +96,7 @@ class L1v2:
                 lright = pl
                 wentRight = False
 
-        if wentRight and hright is not None and lright is not None:
+        if wentRight and hright is not None:
             # Na zadnjem koraku smo zeleli iti desno, torej je d(pa,pi) < diam(Pi)
             # Mozno je torej, da je optimalna resitev bila bolj desno od nase trenutne
             pa, p1, p2 = max([(pa, pl, ph), (pa, pl, hright), (pa, lright, ph), (pa, lright, hright)], key=L1v2.getMaxMinDist)
@@ -112,8 +116,5 @@ class L1v2:
                 P_rot = self.rotate_points(P, angle)
                 s = self.get_S(P_rot, pa_index)  # sorted by x descending?
                 s_rot = self.rotate_points(s, -angle)
-                v = self.getMaxMinDistList(s_rot)
-                val.append((sum(v), (v[0]-v[-1]), v, s_rot))
-
-        val.sort(key=lambda x: (x[0], -x[1], x[2][2], x[2][1], x[2][0]))  # we sort it first by max sum distance, min difference and then by points values
-        return val[-1][3]
+                val.append(s_rot)
+        return max(val, key=lambda x: self.getMaxMinDist(x))

@@ -81,7 +81,7 @@ class Linf:
                 hright = ph
                 lright = pl
                 wentRight = False
-        if wentRight:
+        if wentRight and lright is not None:
             # Na zadnjem koraku smo zeleli iti desno, torej je d(pa,pi) < diam(Pi)
             # Mozno je torej, da je optimalna resitev bila bolj desno od nase trenutne
             return max([(pa,pl,ph), (pa,pl,hright), (pa,lright,ph), (pa,lright,hright)], key=Linf.getMaxMinDist)
