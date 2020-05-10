@@ -46,6 +46,7 @@ class L1v2:
         pa = max(P, key=lambda x: fact * x[0])  # Zacetna tocka
 
         key_dim = lambda x:  L1v2.L_1_metric(pa, x)  # Kljuc za primerjanje v dimenziji (dim)
+        key1 = lambda x: x[1] # Uporabljamo samo zato, ker je sicer VSC pobarval spodaj kot napako, ceprav je ni bilo, in je bilo nadlezno
 
         pl = pa
         ph = pa
@@ -65,10 +66,10 @@ class L1v2:
 
             # type U
             pbU = min(Pi, key=lambda x: x[1])
-            if lright is not None and lright[1] < pbU[1]:
+            if lright is not None and key1(lright) < pbU[1]:
                 pbU = lright
             pcU = max(Pi, key=lambda x: x[1])
-            if hright is not None and hright[1] > pcU[1]:
+            if hright is not None and key1(hright) > pcU[1]:
                 pcU = hright
             # type D
             pbD = pi
@@ -92,21 +93,18 @@ class L1v2:
             else:
                 # Iskanje se bo nadaljevalo v levi polovici Pi
                 P = [p for p in P if key_dim(p) < pi_key]
-                hright = ph
-                lright = pl
+                hright = pcU
+                lright = pbU
                 wentRight = False
 
         if wentRight and hright is not None:
             # Na zadnjem koraku smo zeleli iti desno, torej je d(pa,pi) < diam(Pi)
             # Mozno je torej, da je optimalna resitev bila bolj desno od nase trenutne
-            pa, p1, p2 = max([(pa, pl, ph), (pa, pl, hright), (pa, lright, ph), (pa, lright, hright)], key=L1v2.getMaxMinDist)
+            return max([(pa, pl, ph), (pa, pl, hright), (pa, lright, ph), (pa, lright, hright)], key=L1v2.getMaxMinDist)
         else:
             # Na zadnjem koraku smo sli v levo polovico, torej d(pa,pi) >= diam(Pi)
             # V levi polovici je tocka P[0], preverimo, ce je boljsa od pl/ph
-            pa, p1, p2 = max([(pa, pl, ph), (pa, pl, P[0]), (pa, P[0], ph)], key=L1v2.getMaxMinDist)
-        if self.is_type_U(p1, p2):
-            return pa, p1, p2
-        return pa, p2, p1
+            return max([(pa, pl, ph), (pa, pl, P[0]), (pa, P[0], ph)], key=L1v2.getMaxMinDist)
 
     def three_dispersion(self, P):
         val = []
