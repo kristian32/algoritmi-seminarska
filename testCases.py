@@ -1,5 +1,4 @@
 import glob
-import ast
 import matplotlib.pyplot as plt
 import time
 from numpy.ma import sqrt

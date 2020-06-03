@@ -35,22 +35,24 @@ class Graphs:
                 tts[j][i] = round(t * 1000 / rep)
                 ttmaxs[j][i] = round(tmaxs[j] * 1000)
                 ttmins[j][i] = round(tmins[j] * 1000)
+        # colors = ["b", "r", "g"]
         for i, metric in enumerate(metrics):
             tt = tts[i]
             line, = plt.plot(nrange, tt)
             line.set_label(metric.metric)
             if minmax:
-                linemax, = plt.plot(nrange, ttmaxs[i], alpha=0.2)
-                linemin, = plt.plot(nrange, ttmins[i], alpha=0.2)
-                linemax.set_label(f"{metric.metric} max")
-                linemin.set_label(f"{metric.metric} min")
+                linemax, = plt.plot(nrange, ttmaxs[i], alpha=0.2, color="r")
+                linemin, = plt.plot(nrange, ttmins[i], alpha=0.2, color="g")
+        if minmax:
+            linemax.set_label("max")
+            linemin.set_label("min")
         if len(metrics) == 1:
-            plt.title(f"Time complexity for 3-Dispersion Problem using {metrics[0].metric} metric.")
+            plt.title(f"Časovna zahtevnost za 3-disperzijski problem z {metrics[0].metric} metriko.")
             if minmax:
                 plt.legend(loc="upper left")
         else:
             plt.legend(loc="upper left")
-            plt.title("Time complexity for Max-Min 3-Dispersion Problem.")
-        plt.ylabel("time [ms]")
-        plt.xlabel("number of input points")
+            plt.title("Časovna zahtevnost za Max-Min 3-disperzijski problem.")
+        plt.ylabel("čas [ms]")
+        plt.xlabel("število vhodnih točk")
         plt.show()
