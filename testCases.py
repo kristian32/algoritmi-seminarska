@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import time
 from numpy.ma import sqrt
 from L_1 import L1
-from L_1v2 import L1v2
 from L_2 import L2
 from L_inf import Linf
 
@@ -77,19 +76,18 @@ P3 = [(4, 1), (4, 2), (4, 3), (4, 4),
       (3, 1), (3, 2), (3, 3), (3, 4),
       (2, 1), (2, 2), (2, 3), (2, 4)]
 
-P = [(P1, "P1"), (P2, "P2"), (P3, "P3")]  # TODO add more samples
+e = 0.9
+c = sqrt(2)/2
+ec = e*c
+P4 = [(-sqrt(3)/2,-1/2), (sqrt(3)/2,-1/2), (0,1), (ec*(1-sqrt(3))/2, ec*(-1-sqrt(3))/2),
+        (ec*(1+sqrt(3))/2, ec*(sqrt(3)-1)/2), (-ec,ec)] + \
+            [(-sqrt(39)/8,-5/8), (sqrt(39)/8,-5/8)]
+
+P = [(P1, "P1"), (P2, "P2"), (P3, "P3"), (P4, "P4")]  # TODO add more samples
 metrics = [L1(), L2(), Linf()]
 
 measured_times = []
 S = []
-
-# for filename in glob.glob("./inputs/*.txt"):
-#     f = open(filename, "r")
-#     P.append((ast.literal_eval(f.readline()), filename))
-
-# filename = "./inputs/input_10_0.txt"
-# f = open(filename, "r")
-# P.append((ast.literal_eval(f.readline()), filename))
 
 for p, p_name in P:
     px, py = get_x_y_values(p)
